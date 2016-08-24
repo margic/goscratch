@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite tests="1" failures="0" time="0.015" name="github.com/margic/goscratch">
+		<properties>
+			<property name="go.version" value="go1.6.3"></property>
+		</properties>
+		<testcase classname="goscratch" name="TestDummy" time="0.000"></testcase>
+	</testsuite>
+</testsuites>
