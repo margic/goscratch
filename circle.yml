@@ -2,9 +2,13 @@ machine:
   services:
     - docker
 
+dependencies:
+  override:
+    - go get -u github.com/jstemmer/go-junit-report
+
 test:
   override:
-    - go test -v ./...
+    - go test -v ./... | go-junit-report > report.xml
 
 deployment:
   hub:
@@ -13,4 +17,5 @@ deployment:
       # Build the builder image
       - docker build -t pcrofts/goscratch .
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push pcrofts/goscratch
+      # no need to push every time for testing build.
+      #- docker push pcrofts/goscratch
