@@ -5,3 +5,13 @@ machine:
 test:
   override:
     - go test -v ./...
+
+deployment:
+  override:
+    # Build the builder image
+    - docker build -t pcrofts/goscratch .
+  hub:
+  branch: master
+  commands:
+    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+    - docker push pcrofts/goscratch
