@@ -4,10 +4,12 @@ machine:
 
 dependencies:
   pre:
+    # Get the go junit report generator
     - go get -u github.com/jstemmer/go-junit-report
 
 test:
-  override:
+   override:
+    # run the tests and output a junit style report in the circle folder
     - mkdir -p $CIRCLE_TEST_REPORTS/junit
     - go test -v ./... | go-junit-report > $CIRCLE_TEST_REPORTS/junit/test-results.xml
 
