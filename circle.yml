@@ -8,7 +8,10 @@ dependencies:
   pre:
     # Get the go junit report generator
     - go get -u github.com/jstemmer/go-junit-report
+    - glide.sh ~/download_cache
+    - glide up
   override:
+    # do the build in the actual container - this is pretest not smart
     - docker build -t pcrofts/goscratch .
 
 test:
