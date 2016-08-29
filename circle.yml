@@ -2,15 +2,14 @@ machine:
   services:
     - docker
 
-checkout:
-  override:
-    # don't build
-    - ls
+
 
 dependencies:
   pre:
     # Get the go junit report generator
     - go get -u github.com/jstemmer/go-junit-report
+  override:
+    - go build -o myout  
 
 test:
   override:
