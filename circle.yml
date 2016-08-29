@@ -9,7 +9,7 @@ dependencies:
     # Get the go junit report generator
     - go get -u github.com/jstemmer/go-junit-report
   override:
-    - go build -o myout  
+    - docker build -t pcrofts/goscratch .
 
 test:
   override:
@@ -22,7 +22,6 @@ deployment:
     branch: master
     commands:
       # Build the builder image
-      - docker build -t pcrofts/goscratch .
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       # no need to push every time for testing build.
       #- docker push pcrofts/goscratch
