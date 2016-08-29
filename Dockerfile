@@ -10,4 +10,5 @@ WORKDIR src/$GOSCRATCH
 
 RUN glide up && go install
 
-ENTRYPOINT ["bash"]
+ENTRYPOINT ["goscratch"]
+CMD ["--help"]
