@@ -8,8 +8,7 @@ dependencies:
   pre:
     # Get the go junit report generator
     - go get -u github.com/jstemmer/go-junit-report
-    - pwd
-    - ls
+    - chmod +x ./glide.up
     - ./glide.sh ~/download_cache
     - glide up
   override:
