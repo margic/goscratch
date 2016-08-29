@@ -5,6 +5,7 @@ machine:
 checkout:
   override:
     # don't build
+    - ls
 
 dependencies:
   pre:
