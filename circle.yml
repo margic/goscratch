@@ -2,6 +2,10 @@ machine:
   services:
     - docker
 
+checkout:
+  override:
+    # don't build
+
 dependencies:
   pre:
     # Get the go junit report generator
