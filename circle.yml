@@ -8,8 +8,10 @@ dependencies:
     - go get -u github.com/jstemmer/go-junit-report
     - chmod +x ./glide.sh
     - ./glide.sh ~/download_cache
-  override:  
+  override:
+    - go get
     - glide up
+    - go build -v
 
 test:
   override:
