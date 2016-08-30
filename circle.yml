@@ -9,7 +9,7 @@ dependencies:
     - chmod +x ./glide.sh
     - ./glide.sh ~/download_cache
   override:
-    - go get
+    - go get -t -d -v ./...
     - glide up
     - go build -v
 
