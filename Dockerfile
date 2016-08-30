@@ -1,8 +1,9 @@
 FROM golang:1.7
 
-RUN glide up && go install
 COPY goscratch ./goscratch
-RUN CHMOD +x ./goscratch
+RUN chmod +x ./goscratch
+
+VOLUME /results
 
 ENTRYPOINT ["./goscratch"]
 CMD ["--help"]
