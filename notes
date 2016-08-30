@@ -28,3 +28,8 @@ RUN glide up && go install
 
 ENTRYPOINT ["goscratch"]
 CMD ["--help"]
+
+
+override:
+  # do the build in the actual container - this is pretest not smart
+  - docker build -t pcrofts/goscratch .
