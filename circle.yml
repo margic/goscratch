@@ -6,11 +6,8 @@ dependencies:
   pre:
     # Get the go junit report generator
     - go get -u github.com/jstemmer/go-junit-report
-    - chmod +x ./glide.sh
-    - ./glide.sh ~/download_cache
   override:
     - go get -t -d -v ./...
-    - glide up
     - go build -v
 
 test:
@@ -27,4 +24,4 @@ deployment:
       - docker build -t pcrofts/goscratch .
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       # no need to push every time for testing build.
-      #- docker push pcrofts/goscratch
+      - docker push pcrofts/goscratch
