@@ -11,7 +11,7 @@ dependencies:
     - go get -t -d -v ./...
     - go build -v
   post:
-    - rm -r ~/.go_workspace
+    - rm -rf ~/.go_workspace
 
 test:
   override:
