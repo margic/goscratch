@@ -46,6 +46,7 @@ var testCmd = &cobra.Command{
 
 func runTest() error {
 	var pwd string
+	var results = "/results/test-results.xml"
 
 	err := processRootFlags()
 	if err != nil {
@@ -77,7 +78,7 @@ func runTest() error {
 	report.Stdin = r
 
 	// create the report file
-	f, err := os.Create("/results/test-results.xml")
+	f, err := os.Create(results)
 	if err != nil {
 		return err
 	}
@@ -101,7 +102,7 @@ func runTest() error {
 		return errors.New("Command returned non zero status")
 	}
 
-	log.Info("Test complete")
+	log.WithField("Output", results).Info("Test complete")
 	return err
 }
 

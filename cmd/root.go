@@ -140,7 +140,7 @@ func runCommand(cmd *exec.Cmd) (status int, err error) {
 		log.Infof("Output: %s\n", string(cmdOutput.Bytes()))
 	}
 	if cmdError.Len() > 0 {
-		log.Errorf("Error: %s\n", string(cmdError.Bytes()))
+		log.Infof("Error: %s\n", string(cmdError.Bytes()))
 	}
 	return status, err
 }
