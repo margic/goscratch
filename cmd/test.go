@@ -60,9 +60,9 @@ func runTest() error {
 	if err != nil {
 		return err
 	}
-	swd := path.Join(pwd, goPkg)
+	swd := path.Join(pwd, "src", goPkg)
 	os.Chdir(swd)
-	defer os.Chdir(pwd)
+
 	log.WithFields(
 		log.Fields{
 			"originalPath": pwd,
@@ -96,8 +96,8 @@ func runTest() error {
 	test.Wait()
 	w.Close()
 	report.Wait()
-
 	reportwriter.Flush()
+	os.Chdir(pwd)
 	log.WithField("Output", results).Info("Test complete")
 	return err
 }

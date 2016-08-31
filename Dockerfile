@@ -1,5 +1,7 @@
 FROM golang:1.7
 
+ENV CGO_ENABLED 0
+
 # Install glide in the builder
 RUN curl https://glide.sh/get | sh
 COPY template/ template
