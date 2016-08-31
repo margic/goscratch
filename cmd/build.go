@@ -15,14 +15,18 @@
 package cmd
 
 import (
+	"bufio"
 	"errors"
 	"os"
 	"os/exec"
 	"path"
+	"text/template"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
+
+var outPath string
 
 // buildCmd represents the build command
 var buildCmd = &cobra.Command{
@@ -35,6 +39,10 @@ var buildCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Debug("build called")
 		err := runBuild()
+		if err != nil {
+			log.Error(err)
+		}
+		err = writeDockerFile()
 		if err != nil {
 			log.Error(err)
 		}
@@ -57,7 +65,7 @@ func runBuild() error {
 		return err
 	}
 
-	cmd := exec.Command("go", "build", "-v", "-o", "/out/goapp")
+	cmd := exec.Command("go", "build", "-v", "-o", path.Join(outPath, "goapp"))
 
 	// get into source folder 	pwd, err = os.Getwd()
 	if err != nil {
@@ -83,6 +91,35 @@ func runBuild() error {
 	return err
 }
 
+func writeDockerFile() error {
+	log.Debug("Writing dockerfile")
+
+	// create the report file
+	f, err := os.Create(path.Join(outPath, "Dockerfile"))
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	w := bufio.NewWriter(f)
+
+	t, err := template.ParseFiles("template/Dockerfile")
+	if err != nil {
+		return err
+	}
+
+	t.Execute(w, data{
+		Binary: "goapp",
+	})
+
+	w.Flush()
+	return nil
+}
+
+type data struct {
+	Binary string
+}
+
 func init() {
 	RootCmd.AddCommand(buildCmd)
 
@@ -94,6 +131,6 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// buildCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	buildCmd.Flags().StringVarP(&outPath, "output", "o", "/out", "Output folder for built assets default /out")
 
 }

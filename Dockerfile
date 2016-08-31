@@ -2,7 +2,7 @@ FROM golang:1.7
 
 # Install glide in the builder
 RUN curl https://glide.sh/get | sh
-
+COPY template/ template
 COPY goscratch ./bin/goscratch
 RUN chmod +x ./bin/goscratch
 
