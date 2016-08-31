@@ -8,8 +8,10 @@ dependencies:
     - go get -u github.com/jstemmer/go-junit-report
   override:
     # do the build
-    - go get -t -u -d -v ./...
+    - go get -t -d -v ./...
     - go build -v
+  post:
+    - rm -r ~/.go_workspace
 
 test:
   override:
