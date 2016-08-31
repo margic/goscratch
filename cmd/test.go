@@ -15,7 +15,9 @@
 package cmd
 
 import (
+	"bufio"
 	"errors"
+	"io"
 	"os"
 	"os/exec"
 	"path"
@@ -65,9 +67,35 @@ func runTest() error {
 	log.WithField("pwd", pwd).Debug("Path")
 	// in source folder
 	//| go-junit-report > $CIRCLE_TEST_REPORTS/junit/test-results.xml
-	cmd = exec.Command("go", "test", "-v", "./...", "|", "go-junit-report", ">", "/results/test-results.xml")
+	test := exec.Command("go", "test", "-v", "./...")
+	report := exec.Command("go-junit-report")
 
-	status, err = runCommand(cmd)
+	r, w := io.Pipe()
+
+	// pipe test out to report in
+	test.Stdout = w
+	report.Stdin = r
+
+	// create the report file
+	f, err := os.Create("/results/test-results.xml")
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	reportwriter := bufio.NewWriter(f)
+	// attach file out to report command output
+	report.Stdout = reportwriter
+
+	// run commnads and wait for completion
+	test.Start()
+	report.Start()
+	test.Wait()
+	w.Close()
+	report.Wait()
+
+	reportwriter.Flush()
+
 	os.Chdir(pwd)
 	if err == nil && status > 1 {
 		return errors.New("Command returned non zero status")
