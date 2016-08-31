@@ -9,9 +9,13 @@ RUN chmod +x ./goscratch
 # get the test reporter
 RUN go get -u github.com/jstemmer/go-junit-report
 
-#  mount a volume for test results
+# volume for outputting built binaries
+VOLUME /bin
+# volume for test results
 VOLUME /results
+# config folder to supply config
 VOLUME /etc/goscratch
 
 ENTRYPOINT ["./goscratch"]
 CMD ["--help"]
+#ENTRYPOINT ["bash"]

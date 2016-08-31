@@ -1,0 +1,7 @@
+logging: DEBUG
+# This config folder is provided for testing only. It is not used by the app.
+# The app reads from /etc/goscratch/goscratch.yaml or overridden with
+# $HOME/.goscratch/goscratch.yaml
+
+# Users can override any value with environment variables such as
+# export LOGGING=DEBUG to override logging level
