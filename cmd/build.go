@@ -15,6 +15,11 @@
 package cmd
 
 import (
+	"errors"
+	"os"
+	"os/exec"
+	"path"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -28,9 +33,54 @@ var buildCmd = &cobra.Command{
 		Then executs go tests on the package.
 		Writes results to mount`,
 	Run: func(cmd *cobra.Command, args []string) {
-
 		log.Debug("build called")
+		err := runBuild()
+		if err != nil {
+			log.Error(err)
+		}
 	},
+}
+
+func runBuild() error {
+	var pwd string
+	pwd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+	err = processRootFlags()
+	if err != nil {
+		return err
+	}
+
+	err = runGoGet()
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command("go", "build", "-v", "-o", "/out/goapp")
+
+	// get into source folder 	pwd, err = os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	swd := path.Join(os.Getenv("GOPATH"), "src", goPkg)
+	err = os.Chdir(swd)
+	if err != nil {
+		return err
+	}
+	defer os.Chdir(pwd)
+	log.WithFields(
+		log.Fields{
+			"originalPath": pwd,
+			"sourcepath":   swd,
+		}).Debug("Path")
+	// in source folder
+	status, err := runCommand(cmd)
+	if err == nil && status > 1 {
+		return errors.New("Command returned non zero status")
+	}
+	return err
 }
 
 func init() {

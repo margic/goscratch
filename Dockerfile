@@ -10,7 +10,7 @@ RUN chmod +x ./bin/goscratch
 RUN go get -u github.com/jstemmer/go-junit-report
 
 # volume for outputting built binaries
-VOLUME /bin
+VOLUME /out
 # volume for test results
 VOLUME /results
 # config folder to supply config

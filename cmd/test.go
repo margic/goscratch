@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"bufio"
-	"errors"
 	"io"
 	"os"
 	"os/exec"
@@ -52,20 +51,23 @@ func runTest() error {
 	if err != nil {
 		return err
 	}
-	log.WithField("Package", goPkg).Debug("Running go get")
-	cmd := exec.Command("go", "get", "-d", "-t", "-v", goPkg)
 
-	status, err := runCommand(cmd)
-	if err == nil && status > 1 {
-		return errors.New("Command returned non zero status")
+	err = runGoGet()
+	if err != nil {
+		return err
 	}
-
 	pwd, err = os.Getwd()
 	if err != nil {
 		return err
 	}
-	os.Chdir(path.Join(pwd, goPkg))
-	log.WithField("pwd", pwd).Debug("Path")
+	swd := path.Join(pwd, goPkg)
+	os.Chdir(swd)
+	defer os.Chdir(pwd)
+	log.WithFields(
+		log.Fields{
+			"originalPath": pwd,
+			"sourcepath":   swd,
+		}).Debug("Path")
 	// in source folder
 	//| go-junit-report > $CIRCLE_TEST_REPORTS/junit/test-results.xml
 	test := exec.Command("go", "test", "-v", "./...")
@@ -96,12 +98,6 @@ func runTest() error {
 	report.Wait()
 
 	reportwriter.Flush()
-
-	os.Chdir(pwd)
-	if err == nil && status > 1 {
-		return errors.New("Command returned non zero status")
-	}
-
 	log.WithField("Output", results).Info("Test complete")
 	return err
 }

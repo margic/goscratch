@@ -144,3 +144,14 @@ func runCommand(cmd *exec.Cmd) (status int, err error) {
 	}
 	return status, err
 }
+
+func runGoGet() error {
+	log.WithField("Package", goPkg).Debug("Running go get")
+	cmd := exec.Command("go", "get", "-d", "-t", "-v", goPkg)
+
+	status, err := runCommand(cmd)
+	if err == nil && status > 1 {
+		return errors.New("Command returned non zero status")
+	}
+	return err
+}
