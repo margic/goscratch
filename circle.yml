@@ -5,10 +5,10 @@ machine:
 dependencies:
   pre:
     # Get the go junit report generator
+    - rm -rf ~/.go_workspace
     - go get -u github.com/jstemmer/go-junit-report
   post:
     - ./goscratch
-    - rm -rf ~/.go_workspace
 
 test:
   override:
