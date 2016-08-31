@@ -64,7 +64,8 @@ func runTest() error {
 	os.Chdir(path.Join(pwd, goPkg))
 	log.WithField("pwd", pwd).Debug("Path")
 	// in source folder
-	cmd = exec.Command("go", "test", "-v", "./...")
+	//| go-junit-report > $CIRCLE_TEST_REPORTS/junit/test-results.xml
+	cmd = exec.Command("go", "test", "-v", "./...", "|", "go-junit-report", ">", "/results/test-results.xml")
 
 	status, err = runCommand(cmd)
 	os.Chdir(pwd)
