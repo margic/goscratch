@@ -6,7 +6,10 @@ dependencies:
   pre:
     # Get the go junit report generator
     - go get -u github.com/jstemmer/go-junit-report
-    # let default build build the builders binary
+  override:
+    # do the build
+    - go get -t -u -d -v ./...
+    - go build -v
 
 test:
   override:
