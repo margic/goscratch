@@ -16,6 +16,6 @@ VOLUME /results
 # config folder to supply config
 VOLUME /etc/goscratch
 
-ENTRYPOINT ["./goscratch"]
-CMD ["--help"]
-#ENTRYPOINT ["bash"]
+#ENTRYPOINT ["./goscratch"]
+#CMD ["--help"]
+ENTRYPOINT ["bash"]
